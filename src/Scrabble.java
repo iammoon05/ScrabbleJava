@@ -68,4 +68,20 @@ public class Scrabble {
     static {
         PlayerRack = createRandomRack(AlphabetArray, 7);
     }
+
+    public char[] createDistributedBag() {
+        ArrayList<Character> r = new ArrayList<Character>();
+        for (Map.Entry<Character, Integer> entry: ScoreMap_Char_to_Dist.entrySet()) {
+            for (int i = 0; i < entry.getValue(); i++) {
+                r.add(entry.getKey());
+            }
+        }
+
+        char[] result = new char[r.size()];
+        for (int i = 0; i < r.size(); i++) {
+            result[i] = r.get(i);
+        }
+
+        return result;
+    }
 }
