@@ -166,4 +166,16 @@ public class Scrabble {
         }
         return res;
     }
+
+    public String highestScoringWord(ArrayList<String> validWordList) {
+        int score = 0;
+        String res = "";
+        for(String word :  validWordList) {
+            if (calculateScore(word) > score) {
+                score = calculateScore(word);
+                res = word;
+            }
+        }
+        return res;
+    }
 }
