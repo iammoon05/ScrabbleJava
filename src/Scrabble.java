@@ -46,4 +46,26 @@ public class Scrabble {
         }
         ScoreMap_Char_to_Dist = Collections.unmodifiableMap(tempDistributionMap);
     }
+
+    private static final char[] AlphabetArray = new char[26];
+    static {
+        for (int i = 0; i < 26; i++) {
+            AlphabetArray[i] = (char) ('A' + i);
+        }
+    }
+
+    public static char[] PlayerRack = new char[7];
+
+    public static char[] createRandomRack(char[] alphabetArray, Integer rackLength) {
+        Random random = new Random();
+        char[] result = new char[rackLength];
+        for (int i = 0; i < rackLength; i++) {
+            int randomIndex = random.nextInt(26);
+            result[i] = alphabetArray[randomIndex];
+        }
+        return result;
+    }
+    static {
+        PlayerRack = createRandomRack(AlphabetArray, 7);
+    }
 }
