@@ -1,22 +1,18 @@
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 public class Player {
-    private String name;
-    private Integer score;
-    private Integer tries;
-    private final Map<String, Integer> highestScoringWordMap = new HashMap<>();
+    public String name;
+    private Integer score = 0;
+    private Integer tryCount = 0;
+    private final LinkedHashMap<String, Integer> highestScoringWordMap = new LinkedHashMap<>();
+    private ArrayList<String> validWords= new ArrayList<>();
     private ArrayList<String> guessedWords= new ArrayList<>();
+    private char[] playerRack;
 
     public Player(String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return this.name;
-    }
     public Integer getHighestScoringScore() {
         Optional<Integer> firstValue = this.highestScoringWordMap.values().stream().findFirst();
         return firstValue.orElse(0);
@@ -25,17 +21,44 @@ public class Player {
         Optional<String> firstKey = this.highestScoringWordMap.keySet().stream().findFirst();
         return firstKey.orElse("None");
     }
-    public Integer getTriesSoFar() {
-        return this.tries;
+    public Integer getTryCountSoFar() {
+        return this.tryCount;
+    }
+    public void addToTryCountSoFar() {
+        this.tryCount++;
     }
     public Integer getScore() {
         return this.score;
+    }
+    public void setScore(Integer score) {
+        this.score += score;
     }
     public void setGuessedWords(String word) {
         this.guessedWords.add(word);
     }
     public ArrayList<String> getGuessedWords() {
         return this.guessedWords;
+    }
+    public void setValidWords(ArrayList<String> words) {
+        this.validWords = words;
+    }
+    public ArrayList<String> getValidWords() {
+        return this.validWords;
+    }
+    public void setPlayerRack(char[] rackCharArray) {
+        this.playerRack = rackCharArray;
+    }
+    public char[] getPlayerRack() {
+        return this.playerRack;
+    }
+    public void addValidTry(String word, Integer score) {
+        this.addToTryCountSoFar();
+        if (this.highestScoringWordMap.isEmpty()) {
+            this.highestScoringWordMap.put(word, score);
+        } else {
+            this.highestScoringWordMap.putFirst(word, score);
+            this.setGuessedWords(word);
+        }
     }
 
 }
