@@ -42,14 +42,20 @@ public static void main(String[] args) throws IOException {
             userInput = reader.readLine();
             if (Objects.equals(userInput, "/exit/")) {
                 EXIT_GAME = true;
-                break;
             }
-            NewGame.Play_Game(userInput, NewGame.Player_1);
+            NewGame.Play_Game(userInput.toUpperCase(), NewGame.Player_1);
 
         } catch (IOException e) {
             System.err.println("Error reading input: " + e.getMessage());
         }
     } while (!EXIT_GAME && NewGame.ShouldGameGoOn()) ;
+
+    System.out.println("Words Guess: ");
+    System.out.println(Arrays.toString(NewGame.UsedWords.toArray()));
+    System.out.println();
+    System.out.printf("Total tries made: %d", NewGame.Player_1.getTryCountSoFar());
+    System.out.println();
+    System.out.printf("Total Score: %d", NewGame.Player_1.getScore());
 
     reader.close(); // Close the reader when done
 }
