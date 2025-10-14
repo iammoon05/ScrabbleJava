@@ -11,4 +11,14 @@ void main() {
 //        IO.println("i = " + i);
 //    }
 
+
+    Scrabble PlayScrabble = new Scrabble();
+
+//    Integer score = PlayScrabble.calculateScore("GUARDIAN");
+//    IO.println(score);
+//    IO.println(PlayScrabbble.getPlayerRack());
+//    IO.println(PlayScrabble.getDistrbutedPlayerRack());
+
+    char[] playerRack = PlayScrabble.createDistrbutedPlayerRack(7);
+    IO.println(Arrays.toString(playerRack));
 }
