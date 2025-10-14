@@ -84,4 +84,15 @@ public class Scrabble {
 
         return result;
     }
+
+    public char[] createDistrbutedPlayerRack(Integer rackLength) {
+        char[] distributedBag = createDistributedBag();
+        Random random = new Random();
+        char[] result = new char[rackLength];
+        for (int i = 0; i < rackLength; i++) {
+            int randomIndex = random.nextInt(distributedBag.length);
+            result[i] = distributedBag[randomIndex];
+        }
+        return result;
+    }
 }
