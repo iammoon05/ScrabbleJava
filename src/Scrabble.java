@@ -95,4 +95,13 @@ public class Scrabble {
         }
         return result;
     }
+
+    public static Integer calculateScore(String inputWord) {
+        char[] inputCharArray = inputWord.toUpperCase().toCharArray();
+        Integer score = 0;
+        for (char c : inputCharArray ) {
+            score += ScoreMap_Char_to_Score.get(c);
+        }
+        return score;
+    }
 }
