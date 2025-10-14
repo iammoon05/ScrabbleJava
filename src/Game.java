@@ -98,6 +98,7 @@ public class Game {
                 System.out.println();
             } else {
                 player.addToTryCountSoFar();
+                System.out.println("Incorrect Guess! Try again...");
             }
         }
 
