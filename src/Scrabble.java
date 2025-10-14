@@ -178,4 +178,32 @@ public class Scrabble {
         }
         return res;
     }
+
+    public String highestScoringWordWithTripleLetter(ArrayList<String> validWordList) {
+        int score = 0;
+        String res = "None";
+        for(String word :  validWordList) {
+
+            Map<Character, Integer> charCount = new HashMap<Character, Integer>();
+            for (char c : word.toCharArray()) {
+                charCount.merge(c, 1, Integer::sum);
+            }
+
+            boolean greaterThan3Available = false;
+            for (Integer a : charCount.values()) {
+                if (a >= 3) {
+                    greaterThan3Available = true;
+                    break;
+                }
+            }
+
+            if (greaterThan3Available) {
+                if (calculateScore(word) > score) {
+                    score = calculateScore(word);
+                    res = word;
+                }
+            }
+        }
+        return res;
+    }
 }
