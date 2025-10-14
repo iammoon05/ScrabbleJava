@@ -3,11 +3,17 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 public static void main(String[] args) throws IOException {
-    System.out.println("To exit game type: /exit/");
+    System.out.println("To exit game type: :exit");
+    System.out.println("For a new rack: :nr");
     System.out.println("Tell me if you want to play Single or MultiPlayer: ");
     System.out.println("Enter 1 for single and 2 for multiplayer...");
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     String userInput = null;
+
+    String EXIT_Command = ":exit";
+    String NEW_RACK_Command = ":nr";
+    String SHOW_SCORE_Command = ":score";
+    String HELP_Command = ":h";
 
     boolean Valid_Num_of_Player = false;
     boolean EXIT_GAME = false;
@@ -17,7 +23,7 @@ public static void main(String[] args) throws IOException {
     do {
         try {
             userInput = reader.readLine();
-            if (Objects.equals(userInput, "/exit/")) {
+            if (Objects.equals(userInput, EXIT_Command)) {
                 EXIT_GAME = true;
                 break;
             }
@@ -40,10 +46,20 @@ public static void main(String[] args) throws IOException {
     do {
         try {
             userInput = reader.readLine();
-            if (Objects.equals(userInput, "/exit/")) {
+            if (Objects.equals(userInput, EXIT_Command)) {
                 EXIT_GAME = true;
+            } else if (Objects.equals(userInput, NEW_RACK_Command)) {
+                NewGame.Get_New_Rack();
+                System.out.print("Player Rack is: ");
+                System.out.println(Arrays.toString(NewGame.Player_1.getPlayerRack()));
+            } else if (Objects.equals(userInput, SHOW_SCORE_Command)) {
+                System.out.printf("Score so far: %d", NewGame.Player_1.getScore());
+                System.out.println();
+            } else if (Objects.equals(userInput, HELP_Command)) {
+                return;
+            } else {
+                NewGame.Play_Game(userInput.toUpperCase(), NewGame.Player_1);
             }
-            NewGame.Play_Game(userInput.toUpperCase(), NewGame.Player_1);
 
         } catch (IOException e) {
             System.err.println("Error reading input: " + e.getMessage());
