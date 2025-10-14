@@ -1,4 +1,6 @@
 import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Scrabble {
 
@@ -103,5 +105,18 @@ public class Scrabble {
             score += ScoreMap_Char_to_Score.get(c);
         }
         return score;
+    }
+
+    public static ArrayList<String> readDictionaryWords() {
+        String filePath = "./src/dictionary.txt";
+        ArrayList<String> wordCharList = new ArrayList<String>();
+        try (Scanner scanner = new Scanner(new File(filePath))) {
+            while (scanner.hasNext()) {
+                wordCharList.add(scanner.nextLine().toUpperCase());
+            }
+        } catch (FileNotFoundException e){
+            System.err.println(e.getMessage());
+        }
+        return wordCharList;
     }
 }
