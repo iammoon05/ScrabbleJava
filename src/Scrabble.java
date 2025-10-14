@@ -27,44 +27,41 @@ public class Scrabble {
 
     private static final Map<Character, Integer> ScoreMap;
     private static final Map<Character, Integer> DistributionMap;
-    private static final char[] AlphabetArray = new char[26];
+//    private static final char[] AlphabetArray = new char[26];
     public static char[] PlayerRack = new char[7];
 
-
-    static {
-        Map<Character, Integer> tempScoreMap = new HashMap<>();
-        for (Map.Entry<Integer, char[]> entry: Score_To_Letter_Map.entrySet()) {
+    private static Map<Character, Integer>  _helperMapConverter(Map<Integer, char[]> IntegerCharMap) {
+        Map<Character, Integer> tempMap = new HashMap<>();
+        for (Map.Entry<Integer, char[]> entry: IntegerCharMap.entrySet()) {
             for (Character e : entry.getValue()) {
-                tempScoreMap.put(e, entry.getKey());
+                tempMap.put(e, entry.getKey());
             }
         }
-        ScoreMap = Collections.unmodifiableMap(tempScoreMap);
-
-        Map<Character, Integer> tempDistributionMap = new HashMap<>();
-        for (Map.Entry<Integer, char[]> entry: Distribution_To_Letter_Map.entrySet()) {
-            for (Character e : entry.getValue()) {
-                tempDistributionMap.put(e, entry.getKey());
-            }
-        }
-        DistributionMap = Collections.unmodifiableMap(tempDistributionMap);
-
-        for (int i = 0; i < 26; i++) {
-            AlphabetArray[i] = (char) ('A' + i);
-        }
+        return tempMap;
     }
 
-    public static char[] createRandomRack(char[] alphabetArray, Integer rackLength) {
-        Random random = new Random();
-        char[] result = new char[rackLength];
-        for (int i = 0; i < rackLength; i++) {
-            int randomIndex = random.nextInt(26);
-            result[i] = alphabetArray[randomIndex];
-        }
-        return result;
-    }
     static {
-        PlayerRack = createRandomRack(AlphabetArray, 7);
+        ScoreMap = Collections.unmodifiableMap(_helperMapConverter(Score_To_Letter_Map));
+
+        DistributionMap = Collections.unmodifiableMap(_helperMapConverter(Distribution_To_Letter_Map));
+
+//        for (int i = 0; i < 26; i++) {
+//            AlphabetArray[i] = (char) ('A' + i);
+//        }
     }
+
+//    public static char[] createRandomRack(char[] alphabetArray, Integer rackLength) {
+//        Random random = new Random();
+//        char[] result = new char[rackLength];
+//        for (int i = 0; i < rackLength; i++) {
+//            int randomIndex = random.nextInt(26);
+//            result[i] = alphabetArray[randomIndex];
+//        }
+//        return result;
+//    }
+//    static {
+//        PlayerRack = createRandomRack(AlphabetArray, 7);
+//    }
 
     public char[] createDistributedBag(Map<Character, Integer> distMap) {
         ArrayList<Character> r = new ArrayList<Character>();
