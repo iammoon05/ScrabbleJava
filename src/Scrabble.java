@@ -120,7 +120,7 @@ public class Scrabble {
         WordDictionary = readDictionaryWords();
     }
 
-    public ArrayList<String> findValidWords(char[] playerRack) {
+    public ArrayList<String> findValidWords(char[] playerRack, ArrayList<String> dictionary) {
         int[] rackCounts = new int[26];
         //Gets player's rack count of characters
         for (Character c : playerRack) {
@@ -129,7 +129,7 @@ public class Scrabble {
 
         ArrayList<String> validWords = new ArrayList<String>();
 
-        for(String word : WordDictionary) {
+        for(String word : dictionary) {
             int[] wordCharCount = new int[26];
             //Gets each words character count
             for (Character c : word.toCharArray()) {
