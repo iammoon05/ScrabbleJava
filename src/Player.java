@@ -59,6 +59,7 @@ public class Player {
             this.highestScoringWordMap.putFirst(word, score);
             this.setGuessedWords(word);
         }
+        this.setScore(score);
     }
 
 }
