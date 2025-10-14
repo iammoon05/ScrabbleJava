@@ -66,9 +66,9 @@ public class Scrabble {
         PlayerRack = createRandomRack(AlphabetArray, 7);
     }
 
-    public char[] createDistributedBag() {
+    public char[] createDistributedBag(Map<Character, Integer> distMap) {
         ArrayList<Character> r = new ArrayList<Character>();
-        for (Map.Entry<Character, Integer> entry: DistributionMap.entrySet()) {
+        for (Map.Entry<Character, Integer> entry: distMap.entrySet()) {
             for (int i = 0; i < entry.getValue(); i++) {
                 r.add(entry.getKey());
             }
@@ -82,8 +82,16 @@ public class Scrabble {
         return result;
     }
 
-    public char[] createDistrbutedPlayerRack(Integer rackLength) {
-        char[] distributedBag = createDistributedBag();
+    public Map<Character, Integer> getDistributionMap() {
+        return DistributionMap;
+    }
+
+    public Map<Character, Integer> getScoreMap() {
+        return ScoreMap;
+    }
+
+    public char[] createDistributedPlayerRack(Integer rackLength, Map<Character, Integer> distMap) {
+        char[] distributedBag = createDistributedBag(distMap);
         Random random = new Random();
         char[] result = new char[rackLength];
         for (int i = 0; i < rackLength; i++) {
@@ -93,14 +101,15 @@ public class Scrabble {
         return result;
     }
 
-    public static Integer calculateScore(String inputWord) {
+    public static Integer calculateScore(String inputWord, Map<Character, Integer> scoreMap) {
         char[] inputCharArray = inputWord.toUpperCase().toCharArray();
         Integer score = 0;
-        for (char c : inputCharArray ) {
-            score += ScoreMap.get(c);
+        for (char c : inputCharArray) {
+            score += scoreMap.get(c);
         }
         return score;
     }
+
 
     public static ArrayList<String> readDictionaryWords() {
         String filePath = "./src/dictionary.txt";
@@ -162,19 +171,19 @@ public class Scrabble {
         return res;
     }
 
-    public String highestScoringWord(ArrayList<String> validWordList) {
+    public String highestScoringWord(ArrayList<String> validWordList, Map<Character, Integer> scoreMap) {
         int score = 0;
         String res = "";
         for(String word :  validWordList) {
-            if (calculateScore(word) > score) {
-                score = calculateScore(word);
+            if (calculateScore(word, scoreMap) > score) {
+                score = calculateScore(word, scoreMap);
                 res = word;
             }
         }
         return res;
     }
 
-    public String highestScoringWordWithTripleLetter(ArrayList<String> validWordList) {
+    public String highestScoringWordWithTripleLetter(ArrayList<String> validWordList, Map<Character, Integer> scoreMap) {
         int score = 0;
         String res = "None";
         for(String word :  validWordList) {
@@ -193,8 +202,8 @@ public class Scrabble {
             }
 
             if (greaterThan3Available) {
-                if (calculateScore(word) > score) {
-                    score = calculateScore(word);
+                if (calculateScore(word, scoreMap) > score) {
+                    score = calculateScore(word, scoreMap);
                     res = word;
                 }
             }
