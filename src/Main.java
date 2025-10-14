@@ -21,7 +21,7 @@ void main() {
 
     char[] playerRack = PlayScrabble.createDistrbutedPlayerRack(7);
     IO.println(Arrays.toString(playerRack));
-    ArrayList<String> result = PlayScrabble.findValidWords(playerRack, PlayScrabble.WordDictionary);
+    ArrayList<String> result = PlayScrabble.findValidWords(playerRack, Scrabble.WordDictionary);
     IO.println(result);
     IO.println(PlayScrabble.longestValidWord(result));
     IO.println(PlayScrabble.highestScoringWord(result));

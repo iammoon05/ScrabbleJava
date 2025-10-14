@@ -38,7 +38,7 @@ static class ScrabbleTestSuite {
         Word_Scores.put("Ball", 3);
 
         for (Map.Entry<String, Integer> entry:  Word_Scores.entrySet()) {
-            Integer score = ScrabbleTest.calculateScore(entry.getKey());
+            Integer score = Scrabble.calculateScore(entry.getKey());
             //equals acts as == even though it's supposed to check for object equality
             //its overridden for types such as Integer, String, Date etc
             actualResults.add(entry.getValue().equals(score));
