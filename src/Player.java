@@ -4,7 +4,7 @@ public class Player {
     public String name;
     private Integer score = 0;
     private Integer tryCount = 0;
-    private final LinkedHashMap<String, Integer> highestScoringWordMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Integer> highestScoringWordMap = new LinkedHashMap<>();
     private ArrayList<String> validWords= new ArrayList<>();
     private ArrayList<String> guessedWords= new ArrayList<>();
     private char[] playerRack;
@@ -60,6 +60,15 @@ public class Player {
             this.setGuessedWords(word);
         }
         this.setScore(score);
+    }
+
+    public void resetPlayer() {
+        this.score = 0;
+        this.tryCount = 0;
+        this.highestScoringWordMap = new LinkedHashMap<>();
+        this.validWords= new ArrayList<>();
+        this.guessedWords= new ArrayList<>();
+        this.setPlayerRack(new char[]{});
     }
 
 }
