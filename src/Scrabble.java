@@ -119,4 +119,39 @@ public class Scrabble {
         }
         return wordCharList;
     }
+
+    public static ArrayList<String> WordDictionary = new ArrayList<String>();
+    static {
+        WordDictionary = readDictionaryWords();
+    }
+
+    public ArrayList<String> findValidWords(char[] playerRack) {
+        int[] rackCounts = new int[26];
+        //Gets player's rack count of characters
+        for (Character c : playerRack) {
+            rackCounts[c - 'A']++;
+        }
+
+        ArrayList<String> validWords = new ArrayList<String>();
+
+        for(String word : WordDictionary) {
+            int[] wordCharCount = new int[26];
+            //Gets each words character count
+            for (Character c : word.toCharArray()) {
+                wordCharCount[c - 'A']++;
+            }
+            boolean valid = true;
+            for (int i = 0; i < 26; i++) {
+                if (rackCounts[i] < wordCharCount[i]) {
+                    valid = false;
+                    break;
+                }
+            }
+
+            if (valid) {
+                validWords.add(word);
+            }
+        }
+        return validWords;
+    }
 }
