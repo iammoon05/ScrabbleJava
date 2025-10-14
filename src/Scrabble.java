@@ -154,4 +154,16 @@ public class Scrabble {
         }
         return validWords;
     }
+
+    public String longestValidWord(ArrayList<String> validWordList) {
+        int l = 0;
+        String res = "";
+        for(String word :  validWordList) {
+            if (word.length() > l) {
+                l = word.length();
+                res = word;
+            }
+        }
+        return res;
+    }
 }
