@@ -25,10 +25,10 @@ public static void main(String[] args) throws IOException {
             userInput = reader.readLine();
             if (Objects.equals(userInput, EXIT_Command)) {
                 EXIT_GAME = true;
-                break;
+            } else {
+                Num_Of_Player = Integer.parseInt(userInput);
+                Valid_Num_of_Player = true;
             }
-            Num_Of_Player = Integer.parseInt(userInput);
-            Valid_Num_of_Player = true;
         } catch (NumberFormatException e) {
             System.out.print("Please enter 1 for single and 2 for multiplayer");
         }
