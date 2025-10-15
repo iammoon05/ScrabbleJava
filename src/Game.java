@@ -25,9 +25,12 @@ public class Game {
     Map<Character, Integer> DistMap;
     Map<Character, Integer> ScoreMap;
 
-    public void SetPlayer1() {
-        return;
-    };
+    char[] first_rack;
+    char[] second_rack;
+
+//    public void SetPlayer1() {
+//        return;
+//    };
 
     public Game(String name1, String name2, PLAYER_MODE player_mode, RACK_TYPE rack) {
         this.Game_Type = player_mode;
@@ -35,6 +38,8 @@ public class Game {
         this.PlayScrabble = new Scrabble();
         this.DistMap = PlayScrabble.getDistributionMap();
         this.ScoreMap = PlayScrabble.getScoreMap();
+        this.first_rack = this.PlayScrabble.createDistributedPlayerRack(7, this.DistMap);
+        this.second_rack = this.PlayScrabble.createDistributedPlayerRack(7, this.DistMap);
 
         this.Rack_Type = rack;
         this.Player_1 = new Player(name1);
@@ -44,39 +49,16 @@ public class Game {
             this.Player_2 = new Player(name2);
         }
 
-
         if (this.Game_Type == PLAYER_MODE.Single) {
-            char[] s_rack = this.PlayScrabble.createDistributedPlayerRack(7, this.DistMap);
-            this.Player_1.setPlayerRack(s_rack);
-            this.ValidWords = PlayScrabble.findValidWords(s_rack, Scrabble.WordDictionary);
-            this.Player_1.setValidWords(this.ValidWords);
-
-
+            SetPlayer1(this.Player_1, 7, this.DistMap);
         } else {
 
-            switch (this.Rack_Type) {
-                case DualRack:
-                    char[] rack1 = this.PlayScrabble.createDistributedPlayerRack(7, this.DistMap);
-                    char[] rack2 = this.PlayScrabble.createDistributedPlayerRack(7, this.DistMap);
-                    this.Player_1.setPlayerRack(rack1);
-                    this.Player_2.setPlayerRack(rack2);
-                    ArrayList<String> ValidWords_1 = PlayScrabble.findValidWords(rack1, Scrabble.WordDictionary);
-                    ArrayList<String> ValidWords_2 = PlayScrabble.findValidWords(rack2, Scrabble.WordDictionary);
-                    this.Player_1.setValidWords(ValidWords_1);
-                    this.Player_2.setValidWords(ValidWords_2);
-
-                case SingleRack:
-                    char[] s_rack = this.PlayScrabble.createDistributedPlayerRack(7, this.DistMap);
-                    this.Player_1.setPlayerRack(s_rack);
-                    this.Player_2.setPlayerRack(s_rack);
-                    this.ValidWords = PlayScrabble.findValidWords(s_rack, Scrabble.WordDictionary);
-                    this.Player_1.setValidWords(this.ValidWords);
-                    this.Player_2.setValidWords(this.ValidWords);
-
-            }
+            SetPlayerWithRack(this.Player_1, this.Player_2, this.first_rack, this.second_rack, this.Rack_Type);
         }
 
     }
+
+
 
     public boolean ShouldGameGoOn() {
         return this.WORDS_LEFT;
@@ -86,17 +68,42 @@ public class Game {
         if (this.Game_Type == PLAYER_MODE.Single) {
             this.Player_1.resetPlayer();
             SetPlayer1(this.Player_1, 7, this.DistMap);
+        } else {
+            this.Player_1.resetPlayer();
+            this.Player_2.resetPlayer();
+            SetPlayerWithRack(this.Player_1, this.Player_2, this.first_rack, this.second_rack, this.Rack_Type);
         }
     }
 
-    public Player SetPlayer1(Player player1, Integer rackLength, Map<Character, Integer> distMap) {
+    public void SetPlayer1(Player player1, Integer rackLength, Map<Character, Integer> distMap) {
         char[] s_rack = this.PlayScrabble.createDistributedPlayerRack(rackLength, distMap);
         player1.setPlayerRack(s_rack);
         this.ValidWords = PlayScrabble.findValidWords(s_rack, Scrabble.WordDictionary);
         player1.setValidWords(this.ValidWords);
         this.UsedWords = new ArrayList<>();
+    }
 
-        return player1;
+    public void SetPlayerWithRack(Player player1, Player player2, char[] first_rack, char[] second_rack, RACK_TYPE rack_type) {
+
+        if (rack_type == Game.RACK_TYPE.SingleRack) {
+            this.first_rack = this.PlayScrabble.createDistributedPlayerRack(7, this.DistMap);
+            player1.setPlayerRack(first_rack);
+            player2.setPlayerRack(first_rack);
+            this.ValidWords = PlayScrabble.findValidWords(first_rack, Scrabble.WordDictionary);
+            player1.setValidWords(this.ValidWords);
+            player2.setValidWords(this.ValidWords);
+        } else {
+            this.first_rack = this.PlayScrabble.createDistributedPlayerRack(7, this.DistMap);
+            this.second_rack = this.PlayScrabble.createDistributedPlayerRack(7, this.DistMap);
+            player1.setPlayerRack(first_rack);
+            player2.setPlayerRack(second_rack);
+            ArrayList<String> ValidWords_1 = PlayScrabble.findValidWords(first_rack, Scrabble.WordDictionary);
+            ArrayList<String> ValidWords_2 = PlayScrabble.findValidWords(second_rack, Scrabble.WordDictionary);
+            player1.setValidWords(ValidWords_1);
+            player2.setValidWords(ValidWords_2);
+        }
+        this.UsedWords = new ArrayList<>();
+
     }
 
     public void Play_Game(String word, Player player) {
@@ -109,6 +116,12 @@ public class Game {
             } else {
                 return;
             }
+        } else {
+            if (this.Rack_Type == RACK_TYPE.SingleRack) {
+                SingleRackMakeGuess(word, player);
+            } else {
+                DualRackMakeGuess(word, player);
+            }
         }
     }
 
@@ -120,11 +133,12 @@ public class Game {
                 this.UsedWords.add(word);
                 Integer score = Scrabble.calculateScore(word, this.ScoreMap);
                 player.addValidTry(word, score);
-                System.out.printf("Correct Guess: %s, with score: %d", word, score);
+                System.out.printf("%s >> Correct Guess: %s, with score: %d", player.name, word, score);
                 System.out.println();
             } else {
                 player.addToTryCountSoFar();
-                System.out.println("Incorrect Guess! Try again...");
+                System.out.printf("%s >> Incorrect Guess! Try again...", player.name);
+                System.out.println();
             }
         }
 
@@ -137,8 +151,12 @@ public class Game {
                 this.UsedWords.add(word);
                 Integer score = Scrabble.calculateScore(word, this.ScoreMap);
                 player.addValidTry(word, score);
+                System.out.printf("%s >> Correct Guess: %s, with score: %d", player.name, word, score);
+                System.out.println();
             } else {
                 player.addToTryCountSoFar();
+                System.out.printf("%s >> Incorrect Guess! Try again...", player.name);
+                System.out.println();
             }
         }
     }
